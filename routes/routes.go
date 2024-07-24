@@ -28,5 +28,6 @@ func Run() {
 func getRoutes() {
 
 	router.POST("/registrar", controllers.PostRegistrar)
+	router.POST("/autenticar", controllers.PostAutenticar)
 
 }

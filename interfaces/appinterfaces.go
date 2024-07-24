@@ -8,3 +8,8 @@ type Registrar struct {
 	Password string `json:"password" binding:"required"`
 	Rol      int    `json:"rol" binding:"required"`
 }
+
+type PostAutenticar struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required"`
+}

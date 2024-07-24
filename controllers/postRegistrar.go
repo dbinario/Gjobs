@@ -50,7 +50,7 @@ func PostRegistrar(c *gin.Context) {
 		}
 
 		// Insertar datos en la tabla
-		stmt, err := db.Prepare("CALL sp_registrarUsuario(?,?,?,?)")
+		stmt, err := db.Prepare("CALL sp_registrarUsuario(?,?,?,?,?)")
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al preparar la consulta"})
 			return
@@ -58,10 +58,20 @@ func PostRegistrar(c *gin.Context) {
 		defer stmt.Close()
 
 		// Ejecutar la consulta con los parámetros
-		_, err = stmt.Exec(registrar.Name, registrar.LastName, registrar.Email, hashedPassword)
+		_, err = stmt.Exec(registrar.Name, registrar.LastName, registrar.Email, hashedPassword, registrar.Rol)
+
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al registrar el usuario"})
 			return
+		}
+
+		db.QueryRow("CALL sp_buscarEmail(?)", registrar.Email).Scan(&count)
+
+		if count != 1 {
+
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al registrar el usuario"})
+			return
+
 		}
 
 		c.JSON(http.StatusOK, gin.H{

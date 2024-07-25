@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"database/sql"
 	"fmt"
 	"gjobs-back/app"
 	"gjobs-back/interfaces"
@@ -13,14 +12,11 @@ import (
 
 func PostRegistrar(c *gin.Context) {
 
-	var db *sql.DB
-
-	//se obtiene la conexion de la base de datos
-
-	app.Setup()
-	db = app.GetDB()
-	//cerramos la conexion despues de usarla
-	defer db.Close()
+	db := app.GetDB()
+	if db == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database connection error"})
+		return
+	}
 
 	var registrar interfaces.Registrar
 
@@ -39,7 +35,7 @@ func PostRegistrar(c *gin.Context) {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "Email ya existe",
 		})
-
+		return
 	} else {
 
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(registrar.Password), 10)

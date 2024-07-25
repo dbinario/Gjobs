@@ -2,6 +2,8 @@ package routes
 
 import (
 	"gjobs-back/controllers"
+	"log"
+	"os"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -22,7 +24,17 @@ func Run() {
 
 	getRoutes()
 
-	router.Run(":8080")
+	// Obtiene el puerto desde la variable de entorno o usa el puerto por defecto
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Puerto por defecto
+	}
+
+	// Inicia el servidor y maneja posibles errores
+	if err := router.Run(":" + port); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
+
 }
 
 func getRoutes() {

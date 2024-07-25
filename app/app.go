@@ -10,39 +10,15 @@ import (
 
 var db *sql.DB
 
-/*
-func Setup() error {
-
-	db_type := os.Getenv("DB_TYPE")
-	db_user := os.Getenv("DB_USER")
-	db_pass := os.Getenv("DB_PASS")
-	db_host := os.Getenv("DB_HOST")
-	db_port := os.Getenv("DB_PORT")
-	db_database := os.Getenv("DB_DATABASE")
-
-	db, err := sql.Open(db_type, db_user+":"+db_pass+"@tcp("+db_host+":"+db_port+")/"+db_database)
-
-	if err != nil {
-
-		return err
-
-	}
-
-	// Verifica la conexión
-	if err := db.Ping(); err != nil {
-		return err
-	}
-
-	return nil
-
-}*/
-
 func Run() error {
 
 	//en caso de que no existan las llaves
 	if os.Getenv("PASETO_PRIVATE_KEY") == "" && os.Getenv("PASETO_PUBLIC_KEY") == "" {
 
-		GenerarLlaves()
+		err := GenerarLlaves()
+		if err != nil {
+			return fmt.Errorf("failed to generate keys: %w", err)
+		}
 
 	}
 
@@ -55,9 +31,29 @@ func Run() error {
 	dbPort := os.Getenv("DB_PORT")
 	dbDatabase := os.Getenv("DB_DATABASE")
 
-	// Verifica que todas las variables de entorno necesarias están presentes
-	if dbType == "" || dbUser == "" || dbHost == "" || dbPort == "" || dbDatabase == "" {
-		return fmt.Errorf("Database configuration missing")
+	missingVars := []string{}
+
+	if dbType == "" {
+		missingVars = append(missingVars, "DB_TYPE")
+	}
+	/*if dbPass == "" {
+		missingVars = append(missingVars, "DB_PASS")
+	}*/
+	if dbUser == "" {
+		missingVars = append(missingVars, "DB_USER")
+	}
+	if dbHost == "" {
+		missingVars = append(missingVars, "DB_HOST")
+	}
+	if dbPort == "" {
+		missingVars = append(missingVars, "DB_PORT")
+	}
+	if dbDatabase == "" {
+		missingVars = append(missingVars, "DB_DATABASE")
+	}
+
+	if len(missingVars) > 0 {
+		return fmt.Errorf("missing environment variables: %v", missingVars)
 	}
 
 	// Establece la conexión a la base de datos
@@ -65,12 +61,12 @@ func Run() error {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbDatabase)
 	db, err = sql.Open(dbType, dsn)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to open database connection: %w", err)
 	}
 
 	// Verifica la conexión
 	if err := db.Ping(); err != nil {
-		return err
+		return fmt.Errorf("failed to ping database: %w", err)
 	}
 
 	return nil

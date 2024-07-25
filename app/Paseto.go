@@ -2,6 +2,7 @@ package app
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"time"
 
@@ -9,20 +10,21 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func GenerarLlaves() {
+func GenerarLlaves() error {
 
 	key := paseto.NewV4AsymmetricSecretKey()
 
 	archivo := ".env"
 
 	// Línea que quieres agregar al archivo
+
 	linea1 := "PASETO_PRIVATE_KEY=" + key.ExportHex()
 	linea2 := "PASETO_PUBLIC_KEY=" + key.Public().ExportHex()
 
 	// Abrir el archivo en modo de escritura con la bandera de añadir ('a' = append)
 	file, err := os.OpenFile(archivo, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("error opening file: %w", err)
 	}
 	defer file.Close()
 
@@ -31,18 +33,23 @@ func GenerarLlaves() {
 
 	// Escribir la nueva línea en el archivo
 	_, err = writer.WriteString(linea1 + "\n" + linea2 + "\n")
+
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("error writing to file: %w", err)
 	}
 
 	// Asegurarse de que todos los datos se escriban en el archivo
 	err = writer.Flush()
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("error flushing writer: %w", err)
 	}
 
-	// volvemos a cargar las variables de entorno
-	godotenv.Load()
+	// Volver a cargar las variables de entorno
+	if err := godotenv.Load(); err != nil {
+		return fmt.Errorf("error reloading environment variables: %w", err)
+	}
+
+	return nil
 
 }
 

@@ -18,8 +18,8 @@ func GenerarLlaves() error {
 
 	// Línea que quieres agregar al archivo
 
-	linea1 := "PASETO_PRIVATE_KEY=" + key.ExportHex()
-	linea2 := "PASETO_PUBLIC_KEY=" + key.Public().ExportHex()
+	linea1 := fmt.Sprintf("PASETO_PRIVATE_KEY=%s", key.ExportHex())
+	linea2 := fmt.Sprintf("PASETO_PUBLIC_KEY=%s", key.Public().ExportHex())
 
 	// Abrir el archivo en modo de escritura con la bandera de añadir ('a' = append)
 	file, err := os.OpenFile(archivo, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)

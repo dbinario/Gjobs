@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"gjobs-back/app"
 	"gjobs-back/interfaces"
 	"net/http"
@@ -45,7 +44,7 @@ func PostAutenticar(c *gin.Context) {
 
 			db.QueryRow("CALL sp_autenticacionCorrecta(?)", autenticar.Email).Scan(&id, &nombreCompleto, &rol)
 
-			fmt.Println(id, nombreCompleto, rol)
+			//fmt.Println(id, nombreCompleto, rol)
 
 			token := app.GenerateTokenPaseto(id, rol)
 
@@ -54,6 +53,7 @@ func PostAutenticar(c *gin.Context) {
 				"id":             id,
 				"nombreCompleto": nombreCompleto,
 			})
+			return
 
 		} else {
 
@@ -61,6 +61,7 @@ func PostAutenticar(c *gin.Context) {
 			c.JSON(http.StatusUnauthorized,
 				gin.H{"error": "Error en el usuario o contraseña"},
 			)
+			return
 
 		}
 

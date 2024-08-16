@@ -53,7 +53,7 @@ func GenerarLlaves() error {
 
 }
 
-func GenerateTokenPaseto(id_usuario string, rol string) string {
+func GenerateTokenPaseto(id_usuario string, rol string, id_empresa string) string {
 
 	token := paseto.NewToken()
 
@@ -65,6 +65,7 @@ func GenerateTokenPaseto(id_usuario string, rol string) string {
 	//campos personalizados que agregados al token
 	token.SetString("id_usuario", id_usuario)
 	token.SetString("rol", rol)
+	token.SetString("id_empresa", id_empresa)
 
 	privatekey, _ := paseto.NewV4AsymmetricSecretKeyFromHex(os.Getenv("PASETO_PRIVATE_KEY"))
 	signed := token.V4Sign(privatekey, nil)

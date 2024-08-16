@@ -2,6 +2,8 @@ package routes
 
 import (
 	"gjobs-back/controllers"
+	"gjobs-back/controllers/auth/empresa"
+	"gjobs-back/middlewares"
 	"log"
 	"os"
 	"time"
@@ -41,5 +43,14 @@ func getRoutes() {
 
 	router.POST("/registrar", controllers.PostRegistrar)
 	router.POST("/autenticar", controllers.PostAutenticar)
+
+	//creamos la ruta protegida
+	authRoute := router.Group("/auth", middlewares.AuthMiddleware())
+
+	//rutas de la empresa
+
+	empresaRoute := authRoute.Group("/empresas", middlewares.RolMiddleware("3"))
+
+	empresaRoute.POST("/actualizarDatos", empresa.PostActualizarDatosEmpresa)
 
 }

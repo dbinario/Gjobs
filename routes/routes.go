@@ -53,4 +53,6 @@ func getRoutes() {
 
 	empresaRoute.POST("/actualizarDatos", empresa.PostActualizarDatosEmpresa)
 
+	empresaRoute.POST("/publicarVacante", empresa.PostPublicarVacante)
+
 }

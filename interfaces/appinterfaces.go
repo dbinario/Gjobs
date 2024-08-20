@@ -17,3 +17,18 @@ type Autenticar struct {
 type ActualizarDatosEmpresa struct {
 	NombreEmpresa string `json:"nombreEmpresa" binding:"required"`
 }
+
+type Vacante struct {
+	IdEmpresa      int    `json:"idEmpresa"`
+	NombreVacante  string `json:"nombreVacante"`
+	OcultarEmpresa int    `json:"ocultarEmpresa"`
+	Contratacion   int    `json:"contratacion"`
+	Horario        int    `json:"horario"`
+	Modalidad      int    `json:"modalidad"`
+	Municipio      int    `json:"municipio"`
+	Estado         int    `json:"estado"`
+	RangoMin       int    `json:"rangoMin"`
+	RangoMax       int    `json:"rangoMax"`
+	OcultarRango   int    `json:"ocultarRango"`
+	Descripcion    string `json:"descripcion"`
+}

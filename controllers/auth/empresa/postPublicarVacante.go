@@ -17,10 +17,10 @@ func PostPublicarVacante(c *gin.Context) {
 		return
 	}
 
-	var vacante interfaces.Vacante
+	var publicarVacante interfaces.PublicarVacante
 
 	//validamos que vengan con los parametos que requerimos
-	if err := c.ShouldBindJSON(&vacante); err != nil {
+	if err := c.ShouldBindJSON(&publicarVacante); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -34,7 +34,7 @@ func PostPublicarVacante(c *gin.Context) {
 	defer stmt.Close()
 
 	// Ejecutar la consulta con los parámetros
-	_, err = stmt.Exec(c.GetString("id_empresa"), vacante.NombreVacante, vacante.OcultarEmpresa, vacante.Contratacion, vacante.Horario, vacante.Modalidad, vacante.Municipio, vacante.Estado, vacante.RangoMin, vacante.RangoMax, vacante.OcultarRango, vacante.Descripcion)
+	_, err = stmt.Exec(c.GetString("id_empresa"), publicarVacante.NombreVacante, publicarVacante.OcultarEmpresa, publicarVacante.Contratacion, publicarVacante.Horario, publicarVacante.Modalidad, publicarVacante.Municipio, publicarVacante.Estado, publicarVacante.RangoMin, publicarVacante.RangoMax, publicarVacante.OcultarRango, publicarVacante.Descripcion)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al guardar la vacante"})

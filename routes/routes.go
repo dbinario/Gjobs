@@ -41,10 +41,16 @@ func Run() {
 
 func getRoutes() {
 
+	//rutas publicas
+
 	router.POST("/registrar", controllers.PostRegistrar)
+
 	router.POST("/autenticar", controllers.PostAutenticar)
 
+	router.GET("/vacante/:id", controllers.GetVacante)
+
 	//creamos la ruta protegida
+
 	authRoute := router.Group("/auth", middlewares.AuthMiddleware())
 
 	//rutas de la empresa

@@ -18,7 +18,7 @@ type ActualizarDatosEmpresa struct {
 	NombreEmpresa string `json:"nombreEmpresa" binding:"required"`
 }
 
-type Vacante struct {
+type PublicarVacante struct {
 	IdEmpresa      int    `json:"idEmpresa"`
 	NombreVacante  string `json:"nombreVacante"`
 	OcultarEmpresa int    `json:"ocultarEmpresa"`
@@ -31,4 +31,19 @@ type Vacante struct {
 	RangoMax       int    `json:"rangoMax"`
 	OcultarRango   int    `json:"ocultarRango"`
 	Descripcion    string `json:"descripcion"`
+}
+
+type Vacante struct {
+	IdVacante        int    `json:"idVacante"`
+	NombreEmpresa    string `json:"nombreEmpresa"`
+	IdEmpresa        int    `json:"idEmpresa"`
+	NombreVacante    string `json:"nombreVacante"`
+	TipoContratacion string `json:"tipoContratacion"`
+	Horario          string `json:"horario"`
+	Modalidad        string `json:"modalidad"`
+	Municipio        string `json:"municipio"`
+	Estado           string `json:"estado"`
+	RangoMin         int    `json:"rangoMin"`
+	RangoMax         int    `json:"rangoMax"`
+	Descripcion      string `json:"descripcion"`
 }
